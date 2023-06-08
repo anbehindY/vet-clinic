@@ -21,3 +21,66 @@ where name != 'Gabumon';
 
 select * from animals
 where weight_kg >= 10.4 and weight_kg <= 17.3;
+
+
+
+begin transaction;
+update animals
+set species = 'unspecified';
+select * from animals;
+rollback;
+
+begin transaction;
+update animals
+set species = 'digimon' where RIGHT(name,3)= 'mon';
+update animals
+set species = 'pokemon' where species is null;
+select * from animals;
+commit transaction;
+select * from animals;
+
+begin transaction;
+delete from animals;
+select * from animals;
+rollback;
+select * from animals;
+
+begin;
+delete from animals where date_of_birth > '2022-01-01';
+savepoint del;
+
+update animals
+set weight_kg = (weight_kg * -1);
+
+rollback to savepoint del;
+
+update animals
+set weight_kg= (weight_kg * -1) where weight_kg < 0;
+end;
+
+/* To get the total number of animals */
+select count(name) from animals;
+
+/* Numbers of animals tried to escape */
+select count(escape_attempts)
+from animals
+where escape_attempts = 0;
+
+/* Average weight of animals */
+select avg(weight_kg) from animals;
+
+/* To classify most escaping whether neutered or not */
+select neutered, count(escape_attempts) as total_escape_attempts
+from animals
+group by neutered;
+
+/* Minimal and maximal weight of each type */
+select neutered, min(weight_kg) as min_weight, max(weight_kg) as max_weight
+from animals
+group by neutered;
+
+/* Average number of escape attempts */
+select neutered, avg(escape_attempts) as avg_attempts
+from animals
+where date_of_birth > '1990-01-01' and date_of_birth <= '2000-12-31'
+group by neutered;
