@@ -57,6 +57,7 @@ create table specializations (
 create table visits (
 	animal_id int,
 	vet_id int,
+	date_of_visit date,
 	primary key(animal_id, vet_id),
 	foreign key(animal_id) references animals(id),
 	foreign key(vet_id) references vets(id)
