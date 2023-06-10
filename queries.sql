@@ -114,6 +114,90 @@ join owners on animals.owner_id=owners.id
 join species on animals.species_id = species.id
 where owners.full_name='Jennifer Orwell' and species.name='Digimon';
 
+select a.name, v.date_of_visit
+from animals a
+join visits v
+on v.animal_id = a.id
+join vets
+on vets.id = v.vet_id
+where vet_id=1
+order by date_of_visit desc
+limit 1;
+
+select a.name
+from animals a
+join visits v
+on v.animal_id = a.id
+join vets
+on vets.id = v.vet_id
+where vets.name='Stephanie Mendez';
+
+select v.name, s.name
+from vets v
+left join specializations sp
+on sp.vet_id = v.id
+left join species s
+on s.id = sp.species_id;
+
+select a.name, v.date_of_visit
+from animals a
+join visits v
+on v.animal_id = a.id
+join vets
+on vets.id = v.vet_id
+where vets.name='Stephanie Mendez' 
+and v.date_of_visit > '2020-04-01' 
+and v.date_of_visit < '2020-08-30';
+
+select a.name, count(a.name) as total_visits
+from animals a
+join visits v
+on v.animal_id = a.id
+join vets
+on vets.id = v.vet_id
+group by a.name
+order by total_visits desc
+limit 1;
+
+select vets.name, a.name, v.date_of_visit
+from animals a
+join visits v
+on v.animal_id = a.id
+join vets
+on vets.id = v.vet_id
+where vets.name='Maisy Smith'
+order by v.date_of_visit asc
+limit 1;
+
+select a.name as animal_name, a.neutered as neutered_status, a.escape_attempts,
+vets.name as vet_name, vets.age as vet_age, vets.date_of_graduation, v.date_of_visit
+from animals a
+join visits v
+on v.animal_id = a.id
+join vets
+on vets.id = v.vet_id
+order by date_of_visit desc;
+
+select count(*) as total_visit
+from visits v
+join vets
+on vets.id = v.vet_id
+left join specializations sp
+on sp.vet_id = vets.id
+left join species s
+on s.id = sp.species_id
+where sp.species_id is null;
+
+select s.name as speciality
+from visits v
+join vets on vets.id=v.vet_id
+join animals a on a.id=v.animal_id
+join species s on s.id = a.species_id
+where vets.name='Maisy Smith'
+group by s.name
+order by count(*) desc
+limit 1;
+
 select animals.name
 from animals
 join owners on animals.owner_id=owners.id
